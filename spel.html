@@ -80,8 +80,8 @@
 
                     stars = this.physics.add.group({
                         key: 'star',
-                        repeat: 111,
-                        setXY: { x: 12, y: 0, stepX: 10 }
+                        repeat: 1,
+                        setXY: { x: 12, y: 0, stepX: 70 }
                     });
 
                     stars.children.iterate(function (child) {
@@ -130,6 +130,56 @@
                 }
             });
 
+
+            var gameover = new Phaser.Class({
+                Extends: Phaser.Scene,
+
+                initialize:
+
+                    function gameover() {
+                        Phaser.Scene.call(this, { key: 'gameover', active: false });
+                    },
+
+                create: function () {
+                    this.add.image(400, 300, 'sky')
+                    this.add.text(0, 0, 'Gameover motherfucker', { font: '"Press Start 2P"' });
+
+                    const helloButton = this.add.text(100, 100, 'Restart!', { fill: '#ffffff' });
+                    helloButton.setInteractive();
+                    helloButton.on('pointerdown', () => { this.scene.start('level') });
+
+                    const m = this.add.text(100, 150, 'Menu', { fill: '#ffffff' });
+                    m.setInteractive();
+                    m.on('pointerdown', () => { this.scene.start('menu') });
+
+
+                }
+            });
+            var menu = new Phaser.Class({
+                Extends: Phaser.Scene,
+
+                initialize:
+
+                    function menu() {
+                        Phaser.Scene.call(this, { key: 'menu', active: false });
+                    },
+
+                create: function () {
+                    this.add.image(400, 300, 'sky')
+                    this.add.text(0, 0, 'Gametime', { font: '"Press Start 2P"' });
+
+                    const helloButton = this.add.text(100, 100, 'Start game', { fill: '#ffffff' });
+                    helloButton.setInteractive();
+                    helloButton.on('pointerdown', () => { this.scene.start('level') });
+                    const exit = this.add.text(100, 150, 'Exit game', { fill: '#ffffff' });
+                    exit.setInteractive();
+                    exit.on('pointerdown', () => { window.close() });
+
+
+                }
+
+
+            });
             function collectStar(player, star) {
                 star.disableBody(true, true);
 
@@ -150,7 +200,7 @@
                     bomb.setCollideWorldBounds(true);
                     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 
-                    platforms.create(Math.random()*800, Math.random()*600, 'ground');
+                    platforms.create(Math.random() * 800, Math.random() * 600, 'ground');
 
                 }
             }
@@ -163,7 +213,8 @@
 
                 gameOver = true;
 
-                var restart = window.confirm("Restart game?");
+                this.scene.start('gameover')
+                /*var restart = window.confirm("Restart game?");
 
                 if (restart) {
                     this.scene.restart()
@@ -171,14 +222,14 @@
                 } else {
                     alert('LOL LOSER')
                     window.close()
-                }
+                } */
                 score = 0;
             }
             var config = {
                 type: Phaser.AUTO,
                 width: 800,
                 height: 600,
-                scene: [level],
+                scene: [level, gameover, menu],
                 physics: {
                     default: 'arcade',
                     arcade: {
