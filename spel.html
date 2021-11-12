@@ -31,6 +31,7 @@
                     },
                 preload: function () {
                     this.load.image('sky', 'assets/sky.png');
+                    this.load.image('gameover', 'assets/gameover.jpg');
                     this.load.image('ground', 'assets/platform.png');
                     this.load.image('star', 'assets/star.png');
                     this.load.image('bomb', 'assets/bomb.png');
@@ -80,7 +81,7 @@
 
                     stars = this.physics.add.group({
                         key: 'star',
-                        repeat: 1,
+                        repeat: 0,
                         setXY: { x: 12, y: 0, stepX: 70 }
                     });
 
@@ -141,16 +142,15 @@
                     },
 
                 create: function () {
-                    this.add.image(400, 300, 'sky')
-                    this.add.text(0, 0, 'Gameover motherfucker', { font: '"Press Start 2P"' });
+                    this.add.image(400, 300, 'gameover')
 
-                    const helloButton = this.add.text(100, 100, 'Restart!', { fill: '#ffffff' });
+                    const helloButton = this.add.text(100, 100, 'Menu', { fill: '#ffffff' });
                     helloButton.setInteractive();
-                    helloButton.on('pointerdown', () => { this.scene.start('level') });
+                    helloButton.on('pointerdown', () => { this.scene.start('menu') });
 
-                    const m = this.add.text(100, 150, 'Menu', { fill: '#ffffff' });
+                    const m = this.add.text(100, 150, 'Restart', { fill: '#ffffff' });
                     m.setInteractive();
-                    m.on('pointerdown', () => { this.scene.start('menu') });
+                    m.on('pointerdown', () => { this.scene.start('level') });
 
 
                 }
@@ -201,6 +201,7 @@
                     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 
                     platforms.create(Math.random() * 800, Math.random() * 600, 'ground');
+                    console.log(score)
 
                 }
             }
